@@ -1,0 +1,46 @@
+<html>
+    <head>
+    <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#queryform").submit(function(){
+                $.ajax({ // create an AJAX call...
+                    data: $(this).serialize(), // get the form data
+                    type: $(this).attr('method'), // GET or POST
+                    // to compose a rest style url
+                    url: "/rec/query/" + $('#algo').val() + "/" + $('#userid').val() + "/" + $('#movieid').val(),
+                    success: function(response) { // on success..
+                        $('#qresult').html(response); // update the DIV
+                    }
+             });
+             return false;
+            })
+        });
+    </script>
+    </head>
+    <body style="margin:0 auto; width:80%"> 
+        <div style="text-align:center">
+            <h1>Recommender System for Movies</h1>
+            Liangdong Deng, Juan Riveros, Zhenghua Gong and Zhaowei Hou
+        </div>
+        <div id="query">
+            <h1>Algorithms Test</h1>
+            <div>
+                <p>Please input user id, movie id and algorithm, NOTE that only if the input userid rated the input movie id can you get the result.</br>
+                Please download the attached original rating files to check which user rated which Movie.</p>
+                <p>e.g. user 1 rated movie 1, and user 7 rated movie 442, etc.</p>
+            </div>
+            <form id="queryform" method="get"> 
+                User ID: <input type="text" id="userid"/> &nbsp;&nbsp;
+                Movie ID: <input type="text" id="movieid"/>
+                Algorithm: 
+                <select id="algo"> 
+                    <option value="1">Hybrid</option>
+                </select>
+                <input type="submit" id="submit" value="submit"/>
+            </form>
+        </div>
+        <div id="qresult">
+        </div>
+    </body>
+</html>
