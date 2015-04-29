@@ -11,6 +11,10 @@ class Hyb(models.Model):
     itemknn = models.FloatField()
     hyb = models.FloatField()
     algo = models.IntegerField()
+    biased = models.FloatField()
+    gen_sec_regsvd = models.FloatField()
+    hknn_reg = models.FloatField()
+    iknn_bias = models.FloatField()
 
     def __unicode__(self):
         return ""
