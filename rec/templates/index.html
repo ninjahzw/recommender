@@ -1,46 +1,101 @@
 <html>
     <head>
+    <style>
+        table, td {
+            width 100%;
+            border-collapse: collapse;
+            border: 1px solid blue;
+            text-align: center;
+        }
+        #query{
+            border-radius: 25px;
+            border: 2px solid #8AC007;
+            padding: 20px; 
+        }
+    </style>
     <script type="text/javascript" src="{{ STATIC_URL }}/static/jquery.js"></script>
     <script>
+        var delay = (function(){
+            var timer = 0;
+            return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
         $(document).ready(function() {
             $("#queryform").submit(function(){
                 $.ajax({ // create an AJAX call...
                     data: $(this).serialize(), // get the form data
                     type: $(this).attr('method'), // GET or POST
                     // to compose a rest style url
-                    url: "/rec/query/" + $('#algo').val() + "/" + $('#userid').val() + "/" + $('#movieid').val(),
+                    url: "/rec/query/" + $('#userid').val() + "/" + $('#movieid').val(),
                     success: function(response) { // on success..
                         $('#qresult').html(response); // update the DIV
                     }
-             });
-             return false;
+                });
+                return false;
             })
+            //called when key is pressed in textbox
+            $("#userid").keypress(function (e) {
+                //if the letter is not digit then display error and don't type anything
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //display error message
+                    $("#errmsg").html("Digits Only").show().fadeOut("slow");
+                return false;
+            }
+            });
+
+            $('#userid').keyup(function() {
+                delay(function(){
+                    $('#movieid').empty();
+                    $.ajax({ // create an AJAX call...
+                        data: $(this).serialize(), // get the form data
+                        type: "GET", 
+                        // to compose a rest style url
+                        url: "/rec/get_movie/" + $('#userid').val(),
+                        success: function(response) { // on success..
+                            if (response == '-1' || response == -1){
+                                return;
+                            }
+                            var res = response.split(" ");
+                            for (i = 0; i < res.length; i++) { 
+                                $('#movieid')
+                                    .append($("<option></option>")
+                                    .attr("value",res[i])
+                                    .text(res[i])); 
+                            }
+                        }
+                    })
+                }, 300 );
+            });
         });
+
     </script>
     </head>
+
     <body style="margin:0 auto; width:80%"> 
-        <div style="text-align:center">
+        <div style="text-align:center; margin-bottom:6px;">
             <h1>Recommender System for Movies</h1>
             Liangdong Deng, Juan Riveros, Zhenghua Gong and Zhaowei Hou
         </div>
         <div id="query">
             <h1>Algorithms Test</h1>
             <div>
-                <p>Please input user id, movie id and algorithm, NOTE that only if the input userid rated the input movie id can you get the result.</br>
-                Please download the attached original rating files to check which user rated which Movie.</p>
-                <p>e.g. user 1 rated movie 1, and user 7 rated movie 442, etc.</p>
+                <p>User id range: 1 ~ 6040</p>
             </div>
             <form id="queryform" method="get"> 
                 User ID: <input type="text" id="userid"/> &nbsp;&nbsp;
-                Movie ID: <input type="text" id="movieid"/>
-                Algorithm: 
-                <select id="algo"> 
-                    <option value="1">Hybrid</option>
-                </select>
+                Movie ID: 
+                <select id="movieid"></select>
                 <input type="submit" id="submit" value="submit"/>
             </form>
+            <div id="qresult">
+            </div>
         </div>
-        <div id="qresult">
+        <div>
+            <h1>Introduction</h1>
+            <p>Recommender Systems are an important application ofmachine learning systems.  A lot of websites such as Ama-zon, Netflix, and applications like iTunes Genius make useof recommender systems to improve the end users experi-ence, and to better target its marketing:</p>
+            <img src="{{ STATIC_URL }}/static/netflix-recommendations.jpg" style="width:60%">
         </div>
     </body>
 </html>
