@@ -1,0 +1,35 @@
+<table>
+    <tr>
+        <td colspan="3"></td>
+        <td colspan="4">result of original algorithm</td>
+        <td colspan="5">result of our algorithm</td>
+    </tr>
+    <tr>
+        <td>user id</td>
+        <td>movie id</td>
+        <td>original rating</td>
+        <td>BiasedMF</td>
+        <td>RegSVD</td>
+        <td>BPMF</td>
+        <td>ItemKNN</td>
+        <td>Hybrid(Mean)</td>
+        <td>Biased</td>
+        <td>GenSpec RegSVD</td>
+        <td>Hybrid KNN,RegSVD</td>
+        <td>Reverse ItemKNN</td>
+    </tr>
+    <tr>
+        <td>{{obj.uid}}</td>
+        <td>{{obj.mid}}</td>
+        <td>{{obj.ori_rat}}</td>
+        <td>{{obj.biasedmf}}</td>
+        <td>{{obj.regsvd}}</td>
+        <td>{{obj.bpmf}}</td>
+        <td>{{obj.itemknn}}</td>
+        <td>{{obj.hyb}}</td>
+        <td>{{obj.biased}}</td>
+        <td>{{obj.gen_sec_regsvd}}</td>
+        <td>{{obj.hknn_reg}}</td>
+        <td>{{obj.iknn_bias}}</td>
+    </tr>
+</table>
